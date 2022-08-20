@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{0584B679-F0F8-4E62-81CE-566B1C6C6280}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcrConsole", "OcrConsole\OcrConsole.csproj", "{C3983F1F-29B2-488F-9948-4C279EA23F89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{D1E29D96-F423-4597-B4EF-9A31D697F213}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{0584B679-F0F8-4E62-81CE-566B1C6C6280}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0584B679-F0F8-4E62-81CE-566B1C6C6280}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0584B679-F0F8-4E62-81CE-566B1C6C6280}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3983F1F-29B2-488F-9948-4C279EA23F89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3983F1F-29B2-488F-9948-4C279EA23F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3983F1F-29B2-488F-9948-4C279EA23F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3983F1F-29B2-488F-9948-4C279EA23F89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1E29D96-F423-4597-B4EF-9A31D697F213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1E29D96-F423-4597-B4EF-9A31D697F213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1E29D96-F423-4597-B4EF-9A31D697F213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1E29D96-F423-4597-B4EF-9A31D697F213}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

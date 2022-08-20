@@ -47,7 +47,7 @@ namespace Infrastructure.General
                 return !string.IsNullOrEmpty(Data) ? JsonConvert.DeserializeObject<T>(Data, _Setting) : default(T);
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 //throw;
