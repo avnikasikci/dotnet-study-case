@@ -31,6 +31,6 @@ Temel olarak tasarlanan sistem Language,Localization,NewsAgency,NewsAgencyCatego
 - NewsAgencyCategory: Haber kategorilerini barındıran modüldür.
 -
 
-#Soru-3
+# Soru-3
 Bu soruya OcrConsole adında yeni bir proje oluşturuldu.
 Ocr response sonucunda yer alan json line parse işlemi gerçekleştirildi.
