@@ -51,32 +51,10 @@ namespace WebApi
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                     sqlServerOptions =>
                     {
-                        sqlServerOptions.MigrationsAssembly("DataAccess");//ayn? db de farkl? migration klasorlerini ay?rmak için tan?mland? 1_31_22
+                        sqlServerOptions.MigrationsAssembly("DataAccess");
                     });
             });
 
-            //     services.AddEntityFramework().AddSqlServer().AddDbContext<MyDbContext>(
-            //options =>
-            //{
-            //    var config = Configuration["Data:DefaultConnection:ConnectionString"];
-            //    options.UseSqlServer(config);
-            //});
-
-            // code removed for brevity
-
-            //services.AddSingleton<DataContext>();
-
-            //services.AddSingleton<IRepository<>, Repository<>>();
-            //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            //services.AddScoped(typeof(Repository<>));
-            //services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
-
-            //services.AddSingleton<ICouponCodeService, CouponCodeService>();
-            //services.AddSingleton<ILanguageService, LanguageService>();
-            //services.AddSingleton<ILocalizationService, LocalizationService>();
-            //services.AddSingleton<INewsAgencyCategoryService, NewsAgencyCategoryService>();
-            //services.AddSingleton<INewsAgencyService, NewsAgencyService>();
-            //services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 
 

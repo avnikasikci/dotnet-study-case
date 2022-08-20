@@ -33,8 +33,8 @@ namespace WebApi.Controllers
             _logger = logger;
             _CouponCodeService = CouponCodeService;
         }
-        [HttpGet("getallbycount")]
-        public IActionResult GetAllByCount(int count)
+        [HttpGet("getall")]
+        public IActionResult GetAll(int count)
         {
 
             var codeList = new List<String>();
@@ -57,20 +57,11 @@ namespace WebApi.Controllers
                 }
 
             } while (codeList.Count <= count);
-
-
-            //var result = _colorService.GetAll();
-            //if (result.Success) return Ok(result);
-
-            //return BadRequest(result);
             return Ok(codeList);
         }
-        [HttpPost("checkallcopoun")]
-        public IActionResult checkallcopoun(List<string> codeJson)
+        [HttpPost("checkunique")]
+        public IActionResult CheckUnique(List<string> codeJson)
         {
-            
-            //var codeList = new List<String>();
-            //var codeList = codeJson.Split(',').ToList();
             var codeList = codeJson;
             var result = false;
             var codeListDisc = codeList.Distinct().ToList();
@@ -83,16 +74,7 @@ namespace WebApi.Controllers
             {
                 result = true;
             }
-            //for (int i = 0; i < count; i++)
-            //{
-            //    var code = _CouponCodeService.Generate(new Buisness.DTO.CouponCodeOptions { Parts = 4, PartLength = 2 });
-            //}
-
-
-            //var result = _colorService.GetAll();
-            //if (result.Success) return Ok(result);
-
-            //return BadRequest(result);
+       
             return Ok(result);
         }
         [HttpPost("validate")]

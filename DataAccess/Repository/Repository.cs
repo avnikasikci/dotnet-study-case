@@ -26,7 +26,6 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
-        /// Tüm kayıtlar.
         /// </summary>
         /// <returns></returns>
         public virtual IQueryable<T> All
@@ -35,7 +34,6 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
-        /// Kayıt bul.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -43,12 +41,8 @@ namespace DataAccess.Repository
         {
             return _dbSet.Find(id);
         }
-        public virtual T SelectById(long id) //Banka hareketleri için eklendi. 
-        {
-            return _dbSet.Find(id);
-        }
+
         /// <summary>
-        /// Kayıt ekle.
         /// </summary>
         /// <param name="entity"></param>
         public virtual void Insert(T entity)
@@ -57,7 +51,6 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
-        /// Kayıt güncelle.
         /// </summary>
         /// <param name="entityToUpdate"></param>
         public virtual void Update(T entityToUpdate)
@@ -65,12 +58,8 @@ namespace DataAccess.Repository
             _dbSet.Attach(entityToUpdate);
             _context.Entry(entityToUpdate).State = EntityState.Modified;
         }
-        public IQueryable<T> AllNonTrackable()
-        {
-            return _dbSet.AsNoTracking<T>();
-        }
+
         /// <summary>
-        /// Kayıt sil.
         /// </summary>
         /// <param name="id">Kayıt id</param>
         public virtual void DeleteById(int id)
@@ -80,7 +69,6 @@ namespace DataAccess.Repository
         }
 
         /// <summary>
-        /// Kayıt sil.
         /// </summary>
         /// <param name="entityToDelete">Kayıt</param>
         public virtual void Delete(T entityToDelete)
@@ -94,234 +82,10 @@ namespace DataAccess.Repository
             _context.SaveChanges();
 
         }
-        public virtual void DeleteMultiple(IEnumerable<T> Entities)
-        {
-            _dbSet.RemoveRange(Entities);
-        }
 
         public virtual void SaveChanges()
         {
             _context.SaveChanges();
-        }
-        public virtual void SaveChangesAsync()
-        {
-            _context.SaveChangesAsync().Wait(); // Wait kaldırmamız lazım fakat genel yapı itibariyla şuan kaldırırsak sistem kitleniyor.
-        }
-
-
-        //Update işlemi yapmaz sadece insert işlemi yapar
-        public void AddMultipleInsert(IEnumerable<T> q)
-        {
-            _dbSet.AddRange(q);
-        }
-
-        // Need to refresh the Db Entity that has been updated in another scope, farklı scope içinde değişien nesneyi algılayabilmek için.   https://entityframework.net/knowledge-base/60604805/need-to-refresh-the-db-entity-that-has-been-updated-in-another-scope
-        public void RefreshList(IEnumerable<T> Entities)
-        {
-            foreach (var entity in Entities)
-            {
-                if (entity != null)
-                {
-                    Refresh(entity);
-                }
-            }
-        }
-        public void Refresh(T entity)
-        {
-            _context.Entry(entity).Reload();
-        }
-
-        ////Id numaralarına göre Insert ve Update
-        //public void AddMultipleInsertUpdate(IEnumerable<T> q)
-        //{
-        //    _dbSet.AddRange(q);
-
-        //    var itemList = new List<T>();
-        //    _context.Configuration.AutoDetectChangesEnabled = false;
-
-        //    foreach (var item in q)
-        //    {
-        //        itemList.Add(item);
-        //        if (itemList.Count % 1000 == 0)
-        //        // Play with this number to see what works best
-        //        {
-        //            _context.Set<T>().AddRange(itemList);
-        //            itemList = new List<T>();
-        //            _context.ChangeTracker.DetectChanges();
-        //            _context.SaveChanges();
-        //            _context?.Dispose();
-        //            _context = new YourDbContext();
-        //        }
-        //    }
-
-        //    _context.Set<T>().AddRange(itemList);
-        //    _context.ChangeTracker.DetectChanges();
-        //    _context.SaveChanges();
-        //    _context?.Dispose();
-        //}
-
-        //public void BulkInsert(IEnumerable<T> entities)
-        //{
-        //    using (var transactionScope = new TransactionScope())
-        //    {
-        //        // some stuff in dbcontext
-
-        //        //2014 beri artık bu EntityFramework.BulkInsert.Extensions package destenlenmiyor. Sorun çıkarırsa manuel yazılan BulkInsertandUpdate fonk. kullanılabilir.
-        //        _context.BulkInsert(entities);
-
-        //        _context.SaveChanges();
-        //        transactionScope.Complete();
-        //    }
-        //}
-
-        public TP ExecuteQueryValue<TP>(string Query, params object[] Params)//.Net Core
-        {
-            return (ExecuteQueryFunc<TP>(Query, false, Params)).FirstOrDefault();
-        }
-
-        public List<TP> ExecuteQuery<TP>(string Query, params object[] Params)//.Net Core
-        {
-            return ExecuteQueryFunc<TP>(Query, true, Params);
-        }
-
-        private List<TP> ExecuteQueryFunc<TP>(string Query, bool IsListObject, params object[] Params) //.Net core içinde yazılmış tek değer dönen veya bir obje dönen işlem.
-        {
-            using (var dummyCmd = _context.Database.GetDbConnection().CreateCommand())
-            {
-                dummyCmd.CommandText = Query;
-                dummyCmd.CommandType = System.Data.CommandType.Text;
-
-                System.Data.Common.DbParameter[] dbParameters = Params.Select(c =>
-                {
-                    System.Data.Common.DbParameter par = dummyCmd.CreateParameter();
-                    par.ParameterName = ((System.Data.Common.DbParameter)c).ParameterName;
-                    par.Value = ((System.Data.Common.DbParameter)c).Value ?? DBNull.Value;
-                    return par;
-                }).ToArray();
-
-                dummyCmd.Parameters.AddRange(dbParameters);
-
-                var entities = new List<TP>();
-
-                _context.Database.OpenConnection();
-
-                using (var result = dummyCmd.ExecuteReader())
-                {
-                    var obj = Activator.CreateInstance<TP>();
-                    Type temp = typeof(TP);
-                    if (!IsListObject)// int32 Decimal string vb. tek değerler için.
-                    {
-                        while (result.Read())
-                        {
-                            var val = result.IsDBNull(0) ? null : result[0];
-                            entities.Add((TP)val);
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        while (result.Read())
-                        {
-
-                            var newObject = Activator.CreateInstance<TP>();
-                            for (var i = 0; i < result.FieldCount; i++)
-                            {
-                                var name = result.GetName(i);
-
-                                PropertyInfo prop = temp.GetProperties().ToList().FirstOrDefault(a => a.Name.ToLower().Equals(name.ToLower()));
-
-                                if (prop == null)
-                                {
-                                    continue;
-                                }
-                                var val = result.IsDBNull(i) ? null : result[i];
-                                prop.SetValue(newObject, val, null); // Gönderilen T objesi nullable ise hata alınabilir. 
-                            }
-                            //entities.Add(map(result));
-                            entities.Add(newObject);
-                        }
-                    }
-                }
-
-                return entities;
-            }
-
-        }
-
-        public List<TP> RawQuery<TP>(string Query, params object[] Params)
-        {
-
-            var QuerySql = (IQueryable<TP>)_dbSet.FromSqlRaw(Query, Params ?? new object[0]);
-            return QuerySql.ToList();
-        }
-
-        public IQueryable<T> RawQuery(string Query, params object[] Parameters)// context içine nesne DbSet edilmiş ise cağırılır DTO dahil.
-        {
-            //return _context.Database.SqlQuery<T>(Query, Parameters);
-            //return _context.Database.< T > (Query, Parameters);
-
-            return (IQueryable<T>)_dbSet.FromSqlRaw(Query, Parameters ?? new object[0]);
-            //return QuerySql.AsEnumerable();
-        }
-        public IEnumerable<TP> RawQuery<TP>(string Query, params Tuple<string, object>[] Parameters)
-        {
-            var dummyCmd = _context.Database.GetDbConnection().CreateCommand();
-
-
-            var dbParameters = Parameters.Select(c =>
-            {
-                var par = dummyCmd.CreateParameter();
-                par.ParameterName = c.Item1;
-                par.Value = c.Item2 ?? DBNull.Value;
-                return par;
-            }).ToArray();
-            //return _context.Database.ExecuteSqlRaw<T>(Query, Parameters);
-
-            var QuerySql = (IQueryable<TP>)_dbSet.FromSqlRaw(Query, Parameters); // Net Core İçin Eklendi
-            return QuerySql.AsEnumerable();
-
-            ////ORNEK
-            //        var result = _StokGroupRepository.RawQuery<StokGroupUDFDTO>("Udf_GetStokGroupDetail",
-            //             new Tuple<string, object>[]{
-            //                new Tuple<string, object>("CountryCode", "TR"),
-            //                new Tuple<string, object>("LanguageCode", "TUR"),
-            //                new Tuple<string, object>("GroupCodes", string.Join(",",groupCodes)),
-            //});
-            //        return result;
-        }
-
-        public void ExecuteRawQuery(string Query, params object[] Parameters)
-        {
-            _context.Database.ExecuteSqlRaw(Query, Parameters ?? new object[0]);
-            //_context.Database.ExecuteSqlCommand(Query, Parameters??new object[0]);
-        }
-        public void ExecuteRawQueryDoNotEnsureTransaction(string Query, params object[] Parameters)
-        {
-            _context.Database.ExecuteSqlRawAsync(Query, Parameters ?? new object[0]);
-            //_context.Database.ExecuteSqlRaw(TransactionalBehavior.DoNotEnsureTransaction, Query, Parameters ?? new object[0]);
-
-            //_context.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, Query, Parameters ?? new object[0]);
-        }
-
-
-        public void SetConnectionTimeout(int ConnectionTimeout)
-        {
-            _context.Database.SetCommandTimeout(ConnectionTimeout); // Default 30 yani 30sn
-        }
-
-        public string ConnectionStr()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetTableName()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetTableNameWithShema()
-        {
-            throw new NotImplementedException();
         }
     }
 
