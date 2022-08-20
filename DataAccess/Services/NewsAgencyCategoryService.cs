@@ -45,6 +45,7 @@ namespace DataAccess.Services
             return result;
 
         }
+        //get all dto
         public List<NewsAgencyCategoryDTO> GetAllDTO()
         {
             var result = this.GetAll().ToList().Select(x => new NewsAgencyCategoryDTO
