@@ -1,13 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SecureRandom.cs" company="Powells IT">
-//   (c) 2015 Rebecca Powell.
-//   Credit: http://stackoverflow.com/a/16907577/119624
-//   Eldar Agalarov: http://stackoverflow.com/users/2449744/eldar-agalarov
-// </copyright>
-// <summary>
-//   The secure random class.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 
 using System;
 using System.Security.Cryptography;

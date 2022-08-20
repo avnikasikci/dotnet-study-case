@@ -13,7 +13,6 @@ namespace DataAccess.Context
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
-            //Configuration.LazyLoadingEnabled = false;
         }
         public DbSet<NewsAgency> NewsAgency { get; set; }
         public DbSet<NewsAgencyCategory> NewsAgencyCategory { get; set; }

@@ -32,7 +32,7 @@ namespace DataAccess.Domain
                 {
                     foreach (var item in JObject.Parse(JsonValue))
                     {
-                        var Key = (item.Key[0] != 'K') ? item.Key : item.Key.Substring(1, item.Key.Length - 1);// Json seriliase sayıları nesne yapmakta sorun yaşarsa diye başına K konur.
+                        var Key = (item.Key[0] != 'K') ? item.Key : item.Key.Substring(1, item.Key.Length - 1);
                         AllValue.Add(Key, item.Value != null ? item.Value.ToString() : "");
                     }
                 }
@@ -45,7 +45,7 @@ namespace DataAccess.Domain
                     var _JsonValue = new ExpandoObject() as IDictionary<string, Object>;
                     foreach (var item in value.Where(x => !string.IsNullOrEmpty(x.Value)))
                     {
-                        var Key = (item.Key[0] != 'K') ? "K" + item.Key : item.Key;// Json seriliase sayıları nesne yapmakta sorun yaşarsa diye başına K konur.
+                        var Key = (item.Key[0] != 'K') ? "K" + item.Key : item.Key;
                         _JsonValue.Add($"{Key}", item.Value);
                     }
 
